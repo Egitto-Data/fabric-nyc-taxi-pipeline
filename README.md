@@ -99,3 +99,24 @@ BEGIN
 END;
 ```
 ![Parameters](images/4.PNG)
+---
+### SP Loading Staging Metadata
+
+For the Stored Procedure Activity “SP Loading Staging Metadata”.
+Code to create the `metadata.processing_log` table.
+
+```sql
+CREATE SCHEMA metadata;
+GO
+
+CREATE TABLE metadata.processing_log
+(
+    pipeline_run_id VARCHAR(255), 
+    table_processed VARCHAR(255), 
+    rows_processed INT, 
+    latest_processed_pickup DATETIME2(6),
+    processed_datetime DATETIME2(6)
+);
+GO
+```
+---
