@@ -51,3 +51,14 @@ The dataset used in this project originates from the **NYC Taxi & Limousine Comm
 ![EndToEnd](images/2.PNG)
 
 ## 🛢️ Core Pipeline Logic & SQL Scripts
+### Script Activity: `Latest Processed Data`
+
+Use the following query inside the **Script Activity** to retrieve the most recent pickup timestamp processed for the staging table:
+
+```sql
+SELECT TOP 1 
+    latest_processed_pickup 
+FROM metadata.processing_log 
+WHERE table_processed = 'staging_nyctaxi_yellow'
+ORDER BY latest_processed_pickup DESC;
+```
