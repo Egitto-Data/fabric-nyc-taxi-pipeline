@@ -66,7 +66,7 @@ ORDER BY latest_processed_pickup DESC;
 
 Pipeline expression for **v_date** Set Variable activity
 
-```
+```json
 @formatDateTime(addToTime(activity('Latest Processed Date').output.resultSets[0].rows[0].latest_processed_pickup, 1, 'Month'), 'yyyy-MM')
 ```
 
