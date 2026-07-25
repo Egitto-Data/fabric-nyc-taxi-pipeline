@@ -47,3 +47,5 @@ The dataset used in this project originates from the **NYC Taxi & Limousine Comm
 * **Scope:** NYC Yellow Taxi (Medallion) Trip Records and Taxi Zone Location Lookup Files.
 
 ---
+
+## 🛢️ Core Pipeline Logic & SQL Scripts
