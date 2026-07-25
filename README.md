@@ -64,15 +64,7 @@ ORDER BY latest_processed_pickup DESC;
 ```
 ### Set Variable Activity: `v_date`
 
-Use the following pipeline expression inside the **Set Variable** activity to dynamically increment the watermark month based on the latest processed timestamp:
-
 ```json
-@formatDateTime(
-  addToTime(
-    activity('Latest Processed Date').output.resultSets[0].rows[0].latest_processed_pickup, 
-    1, 
-    'Month'
-  ), 
-  'yyyy-MM'
-)
+@formatDateTime(addToTime(activity('Latest Processed Date').output.resultSets[0].rows[0].latest_processed_pickup, 1, 'Month'), 'yyyy-MM')
+```
 ```
