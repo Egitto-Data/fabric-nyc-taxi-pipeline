@@ -62,9 +62,11 @@ FROM metadata.processing_log
 WHERE table_processed = 'staging_nyctaxi_yellow'
 ORDER BY latest_processed_pickup DESC;
 ```
-### Set Variable Activity: `v_date`
+### v_date
 
-```json
+Pipeline expression for **v_date** Set Variable activity
+
+```
 @formatDateTime(addToTime(activity('Latest Processed Date').output.resultSets[0].rows[0].latest_processed_pickup, 1, 'Month'), 'yyyy-MM')
 ```
-```
+
