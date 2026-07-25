@@ -69,14 +69,32 @@ Pipeline expression for **v_date** Set Variable activity
 ```json
 @formatDateTime(addToTime(activity('Latest Processed Date').output.resultSets[0].rows[0].latest_processed_pickup, 1, 'Month'), 'yyyy-MM')
 ```
+---
 ### Copy to Staging
 **Pre Copy Script**
 ![PreCopyScript](images/3.PNG)
-
+---
 ### v_end_date
 
 Pipeline expression for **v_end_date** Set Variable activity
 
 ```json
 @addToTime(concat(variables('v_date'), '-01'), 1, 'Month')
+```
+---
+### SP Removing Outlier Dates
+
+For the Stored Procedure Activity “SP Removing Outlier Dates”.
+Create the Stored Procedure `stg.data_cleaning_stg` in the Data Warehouse using the code below.
+
+```sql
+CREATE PROCEDURE stg.data_cleaning_stg
+    @end_date DATETIME2,
+    @start_date DATETIME2
+AS
+BEGIN
+    DELETE FROM stg.nyctaxi_yellow 
+    WHERE tpep_pickup_datetime < @start_date 
+       OR tpep_pickup_datetime > @end_date;
+END;
 ```
