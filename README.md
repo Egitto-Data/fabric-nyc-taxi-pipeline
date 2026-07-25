@@ -98,7 +98,7 @@ BEGIN
        OR tpep_pickup_datetime > @end_date;
 END;
 ```
-![Parameters](images/4.PNG)
+![Parameters](images/6.PNG)
 ---
 ### SP Loading Staging Metadata
 
