@@ -1,2 +1,2 @@
-# fabric-nyc-taxi-pipeline
-nyc-taxi-fabric-end-to-end
+# fabric-nyc-taxi-pipeline ✨
+
