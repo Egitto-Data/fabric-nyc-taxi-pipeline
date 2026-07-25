@@ -70,5 +70,13 @@ Pipeline expression for **v_date** Set Variable activity
 @formatDateTime(addToTime(activity('Latest Processed Date').output.resultSets[0].rows[0].latest_processed_pickup, 1, 'Month'), 'yyyy-MM')
 ```
 ### Copy to Staging
-Pre Copy Script
+**Pre Copy Script**
 ![PreCopyScript](images/3.PNG)
+
+### v_end_date
+
+Pipeline expression for **v_end_date** Set Variable activity
+
+```json
+@addToTime(concat(variables('v_date'), '-01'), 1, 'Month')
+```
