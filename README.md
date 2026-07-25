@@ -21,3 +21,30 @@ The NYC Taxi and Limousine Commission (TLC) generates massive monthly volumes of
 This project builds an automated, robust Lakehouse-to-Warehouse data pipeline leveraging **Microsoft Fabric**. It establishes a dynamic ingestion engine that ingests monthly Parquet files, cleanses and enriches trip records with geographic lookup data, logs pipeline watermarks to prevent duplicate loads, and serves formatted datasets directly to Power BI reports via Semantic Data Models.
 
 ---
+## 🏗️ Architecture & Data Flow
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           MICROSOFT FABRIC SYSTEM                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[ External Source ]
+│
+▼
+┌──────────────────────┐      Copy      ┌──────────────────────────────┐
+│   Fabric Lakehouse   │ ─────────────► │   Data Warehouse (Staging)   │
+│   (Raw Parquet)      │   Activity     │   • stg.nyctaxi_yellow       │
+└──────────────────────┘                │   • stg.taxi_zone_lookup     │
+└──────────────┬───────────────┘
+│
+│ Cleanse & Transform
+│ (Dataflow Gen2 / SP)
+▼
+┌──────────────────────┐   Semantic     ┌──────────────────────────────┐
+│    Power BI Report   │ ◄───────────── │ Data Warehouse (Presentation)│
+│    (Reporting)       │    Model       │   • pres.nyctaxi_yellow      │
+└──────────────────────┘                └──────────────────────────────┘
+▲
+┌──────────────────────┐                               │
+│   metadata.          │ ──────────────────────────────┘
+│   processing_log     │  (Controls Incremental Loads)
+└──────────────────────┘
