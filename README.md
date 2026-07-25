@@ -25,3 +25,25 @@ This project builds an automated, robust Lakehouse-to-Warehouse data pipeline le
 
 ![Workspace Structure](images/1.PNG)
 
+---
+
+## 🛠️ Key Technical Features
+
+1. **Storage Layer (Fabric Lakehouse):** Acts as the landing zone for raw monthly TLC trip data stored in Parquet format.
+2. **Dynamic Data Factory Pipelines:** Uses parameters and variables to dynamically compute file names, dynamic watermarks, and variable execution dates (`pl_stg_processing_nyc_taxi`).
+3. **Automated Staging Management:** Automatically clears/deletes staging tables prior to ingestion while appending historical data safely to presentation tables.
+4. **Data Transformation & Cleansing:** Blends lookup data and cleanses outliers using **Dataflow Gen2**, with a high-performance **Stored Procedure** alternative.
+5. **Incremental Metadata Logging:** Uses a custom `metadata.processing_log` table tracking row counts, pipeline execution dates, and date watermarks.
+6. **Reporting & Analytics:** Exposes the presentation warehouse model via a **Power BI Semantic Model**.
+
+---
+
+## 📊 Data Source
+
+The dataset used in this project originates from the **NYC Taxi & Limousine Commission (TLC) Trip Record Data**. 
+
+* 🔗 **Dataset Access:** You can access the official raw trip data for 2026 directly from the [NYC TLC Trip Record Data Webpage](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page).
+* **Format:** Monthly Parquet Files.
+* **Scope:** NYC Yellow Taxi (Medallion) Trip Records and Taxi Zone Location Lookup Files.
+
+---
