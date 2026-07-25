@@ -1,3 +1,3 @@
 ## fabric-nyc-taxi-pipeline ✨
 ***
-![Alt Text Description](images/projimg.png)
+![NYC Taxi Solution Architecture](images/projimg.png)
