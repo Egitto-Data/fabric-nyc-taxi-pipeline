@@ -149,3 +149,100 @@ END;
 ```
 ![Parameters](images/5.PNG)
 ---
+### Overall Pipeline
+This is a view of the pipeline using the Stored Procedure rather than the Dataflow Gen2.This Consumes fewer Fabric Capacity Units (CUs) because T-SQL queries are heavily optimized by the warehouse query engine.
+![OverallPipeline](images/7.PNG)
+---
+### Create the dbo.nyctaxi_yellow table
+
+This is the initial empty table so we can load the data from the Dataflow/Stored Procedure activities.
+
+```sql
+CREATE TABLE dbo.nyctaxi_yellow
+(
+    vendor VARCHAR(50),
+    tpep_pickup_datetime DATE,
+    tpep_dropoff_datetime DATE,
+    pu_borough VARCHAR(100),
+    pu_zone VARCHAR(100),
+    do_borough VARCHAR(100),
+    do_zone VARCHAR(100),
+    payment_method VARCHAR(50),
+    passenger_count INT,
+    trip_distance FLOAT,
+    total_amount FLOAT
+);
+```
+---
+### SP Processing Presentation
+
+For the Stored Procedure Activity “SP Processing Presentation”.
+Create the Stored Procedure `dbo.process_presentation` in the Data Warehouse using the code below.
+
+```sql
+CREATE PROCEDURE dbo.process_presentation
+AS
+BEGIN
+    INSERT INTO dbo.nyctaxi_yellow
+    SELECT
+        CASE 
+            WHEN nty.VendorID = 1 THEN 'Creative Mobile Technologies'
+            WHEN nty.VendorID = 2 THEN 'VeriFone'
+            ELSE 'Unknown'
+        END AS vendor,
+        FORMAT(nty.tpep_pickup_datetime, 'yyyy-MM-dd') AS tpep_pickup_datetime,
+        FORMAT(nty.tpep_dropoff_datetime, 'yyyy-MM-dd') AS tpep_dropoff_datetime,
+        lu1.Borough AS pu_borough,
+        lu1.Zone AS pu_zone,
+        lu2.Borough AS do_borough,
+        lu2.Zone AS do_zone,
+        CASE 
+            WHEN nty.payment_type = 1 THEN 'Credit Card'
+            WHEN nty.payment_type = 2 THEN 'Cash'
+            WHEN nty.payment_type = 3 THEN 'No Charge'
+            WHEN nty.payment_type = 4 THEN 'Dispute'
+            WHEN nty.payment_type = 5 THEN 'Unknown'
+            WHEN nty.payment_type = 6 THEN 'Voided Trip'
+            ELSE 'Unknown'
+        END AS payment_method,
+        nty.passenger_count AS passenger_count,
+        nty.trip_distance AS trip_distance,
+        nty.total_amount AS total_amount
+    FROM stg.nyc_taxi_yellow nty
+    LEFT JOIN stg.taxi_zone_lookup lu1
+        ON nty.PULocationID = lu1.LocationID
+    LEFT JOIN stg.taxi_zone_lookup lu2
+        ON nty.DOLocationID = lu2.LocationID;
+END;
+```
+---
+### SP Loading Presentation Metadata
+
+For the Stored Procedure Activity “SP Loading Presentation Metadata”.
+Create the Stored Procedure `metadata.insert_presentation_metadata` in the Data Warehouse using the code below.
+
+```sql
+CREATE PROCEDURE metadata.insert_presentation_metadata
+    @pipeline_run_id VARCHAR(255),
+    @table_name VARCHAR(255),
+    @processed_date DATETIME2
+AS
+BEGIN
+    INSERT INTO metadata.processing_log (
+        pipeline_run_id, 
+        table_processed, 
+        rows_processed, 
+        latest_processed_pickup, 
+        processed_datetime
+    )
+    SELECT
+        @pipeline_run_id AS pipeline_id,
+        @table_name AS table_processed,
+        COUNT(*) AS rows_processed,
+        MAX(tpep_pickup_datetime) AS latest_processed_pickup,
+        @processed_date AS processed_datetime
+    FROM dbo.nyctaxi_yellow;
+END;
+```
+![Parameters](images/8.PNG)
+---
