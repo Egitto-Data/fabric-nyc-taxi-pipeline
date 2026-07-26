@@ -246,3 +246,9 @@ END;
 ```
 ![Parameters](images/8.PNG)
 ---
+### Build the Semantic Model and Create the BI Report
+![Smodel](images/10.PNG)
+---
+### Power BI Report Preview
+![Power BI Dashboard](images/9.png)
+*Figure 2: Executive reporting layout connected via Semantic Model.*
