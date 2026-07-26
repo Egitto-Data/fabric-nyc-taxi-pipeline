@@ -251,5 +251,5 @@ END;
 ---
 ### Power BI Report Preview
 ![Parameters](images/9.PNG)
-   *Figure 2: Executive reporting layout connected via Semantic Model.*
+*Figure: Executive reporting layout connected via Semantic Model.*
 
